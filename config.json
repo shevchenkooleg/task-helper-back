@@ -4,7 +4,7 @@
         "tokenLife" : 86400
     },
     "mongoose": {
-        "uri": "mongodb+srv://shevchenkooleg87:BmACqRuVAGtA0N6K@cluster0.keqogkg.mongodb.net/"
+        "uri": ""
     },
     "default": {
         "user": {
