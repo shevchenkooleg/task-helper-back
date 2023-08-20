@@ -1,0 +1,20 @@
+{
+    "port": 1337,
+    "security": {
+        "tokenLife" : 86400
+    },
+    "mongoose": {
+        "uri": "mongodb+srv://shevchenkooleg87:BmACqRuVAGtA0N6K@cluster0.keqogkg.mongodb.net/"
+    },
+    "default": {
+        "user": {
+            "username": "myapi",
+            "password": "abc1234"
+        },
+        "client": {
+            "name": "Android API v1",
+            "clientId": "android",
+            "clientSecret": "SomeRandomCharsAndNumbers"
+        }
+    }
+}
