@@ -117,22 +117,6 @@ router.get('/:id', passport.authenticate('bearer', { session: false }), function
     //
     //
     //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
     //     //     if (query._expand === 'material'){
     //     //         const materialId = []
     //     //         let expandMaterials = []
