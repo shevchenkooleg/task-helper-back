@@ -10,4 +10,6 @@ app.set('port', process.env.PORT || config.get('port') || 3000);
 
 const server = app.listen(app.get('port'), function () {
   log.info('Express server listening on port ' + app.get('port'));
+  console.log('Mongo url: ', process.env.MONGO_URL)
+  console.log('CORS: ', process.env.BASE_URL)
 });

@@ -24,6 +24,7 @@ const material = require('./routes/material');
 const app = express();
 
 const corsOptions ={
+    // origin: 'http://80.249.147.73/',
     origin: process.env.BASE_URL,
     credentials:true,            //access-control-allow-credentials:true
     optionSuccessStatus:200
