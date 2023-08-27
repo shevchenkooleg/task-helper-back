@@ -51,7 +51,7 @@ const httpsServer = https.createServer(options, app);
 //     console.log('CORS: ', process.env.BASE_URL)
 // })
 ;
-httpsServer.listen(8443, function () {
+httpsServer.listen(443, function () {
     console.log(`HTTPS Server is running on ${app.get('https_port')} port`)
     log.info('Express https server listening on port ' + app.get('https_port'));
     console.log('Mongo url: ', process.env.MONGO_URL)
