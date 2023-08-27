@@ -25,7 +25,7 @@ const app = express();
 
 const corsOptions ={
     // origin: 'http://80.249.147.73/',
-    origin: process.env.BASE_URL,
+    origin: process.env.BASE_URL.split(','),
     credentials:true,            //access-control-allow-credentials:true
     optionSuccessStatus:200
 }
