@@ -4,12 +4,37 @@ const libs = process.cwd() + '/libs/';
 const config = require(libs + 'config');
 const log = require(libs + 'log')(module);
 const app = require(libs + 'app');
+const fs = require('fs')
+const https = require("https")
 
 
-app.set('port', process.env.PORT || config.get('port') || 3000);
+app.set('http_port', process.env.HTTP_PORT || config.get('port') || 3000);
+app.set('https_port', process.env.HTTPS_PORT || config.get('port') || 443);
 
-const server = app.listen(app.get('port'), function () {
-  log.info('Express server listening on port ' + app.get('port'));
+const options = {
+  key: fs.readFileSync('key.pem'),
+  cert: fs.readFileSync('cert.pem')
+}
+
+https
+    .createServer(options,app)
+    .listen(app.get('https_port'), function () {
+      console.log(`server is running on ${app.get('https_port')} port`)
+      log.info('Express https server listening on port ' + app.get('port'));
+      console.log('Mongo url: ', process.env.MONGO_URL)
+      console.log('CORS: ', process.env.BASE_URL)
+    })
+
+// const httpsServer = app.listen(app.get('https_port'), function () {
+//   console.log(`server is running on ${app.get('https_port')} port`)
+//
+//   log.info('Express https server listening on port ' + app.get('port'));
+//   console.log('Mongo url: ', process.env.MONGO_URL)
+//   console.log('CORS: ', process.env.BASE_URL)
+// })
+
+const httpServer = app.listen(app.get('http_port'), function () {
+  log.info('Express http server listening on port ' + app.get('http_port'));
   console.log('Mongo url: ', process.env.MONGO_URL)
   console.log('CORS: ', process.env.BASE_URL)
 });
