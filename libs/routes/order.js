@@ -164,6 +164,17 @@ router.get('/:id', passport.authenticate('bearer', { session: false }), function
 // Update order
 router.put('/:id', passport.authenticate('bearer', { session: false }), function (req, res) {
     const orderId = req.params.id;
+    const keyArray = [
+        '_id', 'materialName', 'KSUId', 'dimension', 'fullVolume', '__v'
+    ]
+
+
+    const orderForUpdate = req.body
+    // console.log('before ', orderForUpdate)
+    orderForUpdate.materials.forEach(material=>{
+        keyArray.forEach((el)=>delete material[el])
+    })
+    // console.log('after ', orderForUpdate)
 
     Order.findById(orderId, function (err, order) {
         if (!order) {
@@ -174,19 +185,20 @@ router.put('/:id', passport.authenticate('bearer', { session: false }), function
             });
         }
 
-        order.title = req.body.title;
-        order.description = req.body.description;
-        order.orderId = req.body.orderId
-        order.executeId = req.body.executeId
-        order.description = req.body.description
-        order.orderStatus = req.body.orderStatus
-        order.correctionId = req.body.correctionId
-        order.consignmentNoteId = req.body.consignmentNoteId
-        order.KS2Id = req.body.KS2Id
-        order.writeOffActId = req.body.writeOffActId
-        order.yearOfExecution = req.body.yearOfExecution
-        order.billOfQuantities = req.body.billOfQuantities
+        order.title = orderForUpdate.title;
+        order.description = orderForUpdate.description;
+        order.orderId = orderForUpdate.orderId
+        order.executeId = orderForUpdate.executeId
+        order.description = orderForUpdate.description
+        order.orderStatus = orderForUpdate.orderStatus
+        order.correctionId = orderForUpdate.correctionId
+        order.consignmentNoteId = orderForUpdate.consignmentNoteId
+        order.KS2Id = orderForUpdate.KS2Id
+        order.writeOffActId = orderForUpdate.writeOffActId
+        order.yearOfExecution = orderForUpdate.yearOfExecution
+        order.billOfQuantities = orderForUpdate.billOfQuantities
         order.modified = Date.now()
+        order.materials = orderForUpdate.materials
 
 
         order.save(function (err) {

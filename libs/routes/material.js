@@ -46,6 +46,50 @@ router.get('/', passport.authenticate('bearer', { session: false }), function (r
 
 });
 
+// List materials for Order create/update
+router.get('/search', passport.authenticate('bearer', { session: false }), function (req, res) {
+
+
+    const query = req.query.searchQuery
+    console.log(query)
+    if (query && query.length > 1 ){
+        Material.find( { $or: [ { materialName: {$regex : query} }, { KSUId: {$regex : query} } ] }, function (err, material) {
+                    if (!err) {
+                        return res.json(material);
+                    } else {
+                        res.statusCode = 500;
+
+                        log.error('Internal error(%d): %s', res.statusCode, err.message);
+
+                        return res.json({
+                            error: 'Server error'
+                        });
+                    }
+                });
+    }
+
+    // if (req.query.materialId && req.query.materialId.length !== 0){
+    //     console.log(req.query.materialId)
+    //
+    // } else {
+    //     console.log('getMaterials')
+    //     Material.find(function (err, order) {
+    //         if (!err) {
+    //             return res.json(order);
+    //         } else {
+    //             res.statusCode = 500;
+    //
+    //             log.error('Internal error(%d): %s', res.statusCode, err.message);
+    //
+    //             return res.json({
+    //                 error: 'Server error'
+    //             });
+    //         }
+    //     });
+    // }
+
+});
+
 // Create order
 router.post('/', passport.authenticate('bearer', { session: false }), function (req, res) {
 
