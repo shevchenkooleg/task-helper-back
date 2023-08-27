@@ -41,15 +41,15 @@ const options = {
 // });
 
 
-const httpServer = http.createServer(app);
+// const httpServer = http.createServer(app);
 const httpsServer = https.createServer(options, app);
 
-httpServer.listen(1337, function () {
-    console.log(`HTTP Server is running on ${app.get('http_port')} port`)
-    log.info('Express http server listening on port ' + app.get('http_port'));
-    console.log('Mongo url: ', process.env.MONGO_URL)
-    console.log('CORS: ', process.env.BASE_URL)
-})
+// httpServer.listen(1337, function () {
+//     console.log(`HTTP Server is running on ${app.get('http_port')} port`)
+//     log.info('Express http server listening on port ' + app.get('http_port'));
+//     console.log('Mongo url: ', process.env.MONGO_URL)
+//     console.log('CORS: ', process.env.BASE_URL)
+// })
 ;
 httpsServer.listen(8443, function () {
     console.log(`HTTPS Server is running on ${app.get('https_port')} port`)
