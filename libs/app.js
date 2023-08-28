@@ -36,12 +36,12 @@ app.use(passport.initialize());
 
 
 app.use('/', api);
-app.use('/api/', api);
+app.use('/api', api);
 app.use('/api/users', users);
 app.use('/api/order', order)
 app.use('/api/material', material)
 app.use('/api/articles', articles);
-app.use('/api/oauth/token/', oauth2.token);
+app.use('/api/oauth/token', oauth2.token);
 
 
 
