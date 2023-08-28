@@ -9,8 +9,8 @@ const https = require("https")
 const http = require('http');
 
 
-app.set('http_port', process.env.HTTP_PORT || config.get('port') || 3000);
-app.set('https_port', process.env.HTTPS_PORT || config.get('port') || 443);
+app.set('http_port', process.env.HTTP_PORT || config.get('port') || 1337);
+app.set('https_port', process.env.HTTPS_PORT || config.get('port') || 8337);
 
 const options = {
   key: fs.readFileSync('key.pem'),
@@ -41,19 +41,21 @@ const options = {
 // });
 
 
-// const httpServer = http.createServer(app);
+const httpServer = http.createServer(app);
 const httpsServer = https.createServer(options, app);
 
-// httpServer.listen(1337, function () {
-//     console.log(`HTTP Server is running on ${app.get('http_port')} port`)
-//     log.info('Express http server listening on port ' + app.get('http_port'));
-//     console.log('Mongo url: ', process.env.MONGO_URL)
-//     console.log('CORS: ', process.env.BASE_URL)
-// })
+httpServer.listen(app.get('http_port'), function () {
+    console.log(`HTTP Server is running on ${app.get('http_port')} port`)
+    log.info('Express http server listening on port ' + app.get('http_port'));
+    console.log('Mongo url: ', process.env.MONGO_URL)
+    console.log('CORS: ', process.env.BASE_URL)
+    console.log('\n_________________________________________________________\n\n')
+})
 ;
-httpsServer.listen(8443, function () {
+httpsServer.listen(app.get('https_port'), function () {
     console.log(`HTTPS Server is running on ${app.get('https_port')} port`)
     log.info('Express https server listening on port ' + app.get('https_port'));
     console.log('Mongo url: ', process.env.MONGO_URL)
     console.log('CORS: ', process.env.BASE_URL)
+    console.log('_________________________________________________________')
 });

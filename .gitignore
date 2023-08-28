@@ -27,3 +27,7 @@ node_modules/
 
 # App data
 /data/
+
+#key files
+
+*.pem
