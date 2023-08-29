@@ -160,6 +160,9 @@ router.get('/:id', passport.authenticate('bearer', { session: false }), function
 router.put('/:id', passport.authenticate('bearer', { session: false }), function (req, res) {
     const materialId = req.params.id;
 
+    console.log('KSUId ', req.body.KSUId)
+    console.log('UPPId ', req.body.UPPId)
+
     Material.findById(materialId, function (err, material) {
         if (!material) {
             res.statusCode = 404;
