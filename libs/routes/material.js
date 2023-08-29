@@ -53,7 +53,7 @@ router.get('/search', passport.authenticate('bearer', { session: false }), funct
     const query = req.query.searchQuery
     console.log(query)
     if (query && query.length > 1 ){
-        Material.find( { $or: [ { materialName: {$regex : query} }, { KSUId: {$regex : query} } ] }, function (err, material) {
+        Material.find( { $or: [ { materialName: {$regex : query} }, { KSUId: {$regex : query} }, { UPPId: {$regex : query} } ] }, function (err, material) {
                     if (!err) {
                         return res.json(material);
                     } else {
@@ -90,7 +90,7 @@ router.get('/search', passport.authenticate('bearer', { session: false }), funct
 
 });
 
-// Create order
+// Create material
 router.post('/', passport.authenticate('bearer', { session: false }), function (req, res) {
 
     const material = new Material({
@@ -171,6 +171,7 @@ router.put('/:id', passport.authenticate('bearer', { session: false }), function
 
         material.materialName = req.body.materialName;
         material.KSUId = req.body.KSUId;
+        material.UPPId = req.body.UPPId;
         material.dimension = req.body.dimension;
         material.fullVolume = req.body.fullVolume;
 
