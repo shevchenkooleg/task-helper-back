@@ -96,6 +96,7 @@ router.post('/', passport.authenticate('bearer', { session: false }), function (
     const material = new Material({
         materialName: req.body.materialName,
         KSUId: req.body.KSUId,
+        UPPId: req.body.UPPId,
         dimension: req.body.dimension,
         fullVolume: req.body.fullVolume,
     });
