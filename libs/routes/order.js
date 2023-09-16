@@ -8,25 +8,67 @@ const log = require(libs + 'log')(module);
 const db = require(libs + 'db/mongoose');
 const Order = require(libs + 'model/order');
 const Material = require(libs + 'model/material')
+const {params} = require("superagent/lib/utils");
+const url = require("url");
 
 // List all orders
 router.get('/', passport.authenticate('bearer', { session: false }), function (req, res) {
 
-    console.log('getOrders')
     const userId = req.user._id
-    Order.find({userId: userId}, function (err, order) {
-        if (!err) {
-            return res.json(order);
-        } else {
-            res.statusCode = 500;
 
-            log.error('Internal error(%d): %s', res.statusCode, err.message);
+    const sortFieldMapper = {
+        'order-id': 'orderId',
+        'execute-id': 'executeId',
+        'order-status': 'orderStatus',
+        'correction-id': 'correctionId',
+        'consignment-note-id': 'consignmentNoteId',
+        'bill-of-quantities': 'billOfQuantities',
+        'ks2-id': 'KS2Id',
+        'write-off-act-id': 'writeOffActId',
+        'year-of-execution': 'yearOfExecution',
+    }
 
-            return res.json({
-                error: 'Server error'
-            });
-        }
-    });
+    if (Object.keys(req.query).length > 0){
+        console.log(req.query)
+        console.log('getOrders with query params')
+        const sortOrder = req.query['sort-order'] ?? 'asc'
+        const sortParam = req.query['field'] ?? 'order-id'
+
+        console.log(sortFieldMapper[sortParam])
+
+        Order.find({userId: userId}).sort({[sortFieldMapper[sortParam]]: sortOrder === 'desc' ? -1 : 1}).exec(function (err, order) {
+            if (!err) {
+                return res.json(order);
+            } else {
+                res.statusCode = 500;
+
+                log.error('Internal error(%d): %s', res.statusCode, err.message);
+
+                return res.json({
+                    error: 'Server error'
+                });
+            }
+        });
+
+
+
+
+    } else {
+        console.log('getOrders')
+        Order.find({userId: userId}, function (err, order) {
+            if (!err) {
+                return res.json(order);
+            } else {
+                res.statusCode = 500;
+
+                log.error('Internal error(%d): %s', res.statusCode, err.message);
+
+                return res.json({
+                    error: 'Server error'
+                });
+            }
+        });
+    }
 });
 
 // Create order

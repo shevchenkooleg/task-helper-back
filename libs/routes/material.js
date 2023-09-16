@@ -7,6 +7,8 @@ const log = require(libs + 'log')(module);
 
 const db = require(libs + 'db/mongoose');
 const Material = require(libs + 'model/material');
+const url = require('url');
+
 
 // List all orders
 router.get('/', passport.authenticate('bearer', { session: false }), function (req, res) {
@@ -14,6 +16,7 @@ router.get('/', passport.authenticate('bearer', { session: false }), function (r
 
     if (req.query.materialId && req.query.materialId.length !== 0){
         console.log(req.query.materialId)
+
         Material.find({_id: req.query.materialId}, function (err, order) {
             if (!err) {
                 return res.json(order);

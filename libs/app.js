@@ -3,6 +3,7 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const passport = require('passport');
 const cors = require('cors')
+const { queryParser } = require('express-query-parser')
 
 const libs = process.cwd() + '/libs/';
 require(libs + 'auth/auth');
@@ -17,6 +18,7 @@ const users = require('./routes/users');
 const articles = require('./routes/articles');
 const order = require('./routes/order');
 const material = require('./routes/material');
+
 
 
 
@@ -47,6 +49,17 @@ app.use('/api/oauth/token', oauth2.token);
 
 // Разрешаем доступ к статическим файлам в папке build (где находится скомпилированный клиентский код)
 app.use(express.static(path.join(__dirname, 'build')));
+
+// Конфигурируем парсинг query-параметров http запросов
+
+app.use(
+    queryParser({
+        parseNull: true,
+        parseUndefined: true,
+        parseBoolean: true,
+        parseNumber: true
+    })
+)
 
 // Любой запрос будет перенаправлен на index.html
 app.get('*', (req, res) => {
