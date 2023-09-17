@@ -31,8 +31,9 @@ router.get('/', passport.authenticate('bearer', { session: false }), function (r
     if (Object.keys(req.query).length > 0){
         console.log(req.query)
         console.log('getOrders with query params')
-        const sortOrder = req.query['sort-order'] ?? 'asc'
-        const sortParam = req.query['field'] ?? 'order-id'
+        const sortOrder = req.query['order'] ?? 'asc'
+        const sortParam = req.query['sort'] ?? 'order-id'
+        console.log(sortParam)
 
         console.log(sortFieldMapper[sortParam])
 
