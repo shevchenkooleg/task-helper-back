@@ -29,15 +29,40 @@ router.get('/', passport.authenticate('bearer', { session: false }), function (r
     }
 
     if (Object.keys(req.query).length > 0){
-        console.log(req.query)
+        console.log('req.query: ', req.query)
         console.log('getOrders with query params')
         const sortOrder = req.query['order'] ?? 'asc'
         const sortParam = req.query['sort'] ?? 'order-id'
-        console.log(sortParam)
+        const yearOfExecution = req.query['yearOfExecution']
+        const statusFields = req.query['status'] && req.query['status'].replaceAll('-','_').replaceAll('none', '').split('%')
 
-        console.log(sortFieldMapper[sortParam])
+        // console.log('sortOrder: ', sortOrder)
+        // console.log('sortParam: ', sortParam)
+        // console.log('yearOfExecution: ', yearOfExecution)
 
-        Order.find({userId: userId}).sort({[sortFieldMapper[sortParam]]: sortOrder === 'desc' ? -1 : 1}).exec(function (err, order) {
+        // console.log('sortFieldMapper[sortParam]: ', sortFieldMapper[sortParam])
+
+
+        const searchParams = {
+            userId: userId
+        };
+
+        if (yearOfExecution !== 'any'){
+            searchParams.yearOfExecution =  yearOfExecution;
+        }
+
+        if (statusFields && statusFields[0] !== 'all'){
+            searchParams.orderStatus = statusFields
+        } else if (statusFields && statusFields[0] === 'all'){
+
+        } else {
+            searchParams.orderStatus = []
+        }
+
+        console.log('searchParams: ', searchParams)
+
+
+        Order.find(searchParams).sort({[sortFieldMapper[sortParam]]: sortOrder === 'desc' ? -1 : 1}).exec(function (err, order) {
             if (!err) {
                 return res.json(order);
             } else {
