@@ -93,6 +93,28 @@ router.get('/search', passport.authenticate('bearer', { session: false }), funct
 
 });
 
+//Search by array with materialID data
+router.get('/searchMany', passport.authenticate('bearer', { session: false }), function (req, res) {
+
+    const query = Object.values(req.query)
+
+    if (query && query.length > 0 ){
+        Material.find( {'_id': {$in:query}}, function (err, material) {
+            if (!err) {
+                return res.json(material);
+            } else {
+                res.statusCode = 500;
+
+                log.error('Internal error(%d): %s', res.statusCode, err.message);
+
+                return res.json({
+                    error: 'Server error'
+                });
+            }
+        });
+    }
+})
+
 // Create material
 router.post('/', passport.authenticate('bearer', { session: false }), function (req, res) {
 
