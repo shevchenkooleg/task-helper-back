@@ -26,6 +26,8 @@ router.get('/', passport.authenticate('bearer', { session: false }), function (r
         'ks2-id': 'KS2Id',
         'write-off-act-id': 'writeOffActId',
         'year-of-execution': 'yearOfExecution',
+        'order-execution-type': 'orderExecutionType',
+        'order-type': 'orderType',
     }
 
     if (Object.keys(req.query).length > 0){
@@ -34,6 +36,8 @@ router.get('/', passport.authenticate('bearer', { session: false }), function (r
         const sortOrder = req.query['order'] ?? 'asc'
         const sortParam = req.query['sort'] ?? 'order-id'
         const yearOfExecution = req.query['yearOfExecution']
+        const orderType = req.query['orderType']
+        const orderExecutionType = req.query['orderExecutionType']
         const statusFields = req.query['status'] && req.query['status'].replaceAll('-','_').replaceAll('none', '').split('%')
 
         // console.log('sortOrder: ', sortOrder)
@@ -48,7 +52,15 @@ router.get('/', passport.authenticate('bearer', { session: false }), function (r
         };
 
         if (yearOfExecution !== 'any'){
-            searchParams.yearOfExecution =  yearOfExecution;
+            searchParams.yearOfExecution = yearOfExecution;
+        }
+
+        if (orderType !== 'any'){
+            searchParams.orderType = orderType;
+        }
+
+        if (orderExecutionType !== 'any'){
+            searchParams.orderExecutionType = orderExecutionType;
         }
 
         if (statusFields && statusFields[0] !== 'all'){
@@ -104,7 +116,9 @@ router.post('/', passport.authenticate('bearer', { session: false }), function (
         userId: req.body.userId,
         description: req.body.description,
         orderId: req.body.orderId,
-        yearOfExecution: req.body.yearOfExecution
+        yearOfExecution: req.body.yearOfExecution,
+        orderType: req.body.orderType,
+        orderExecutionType: req.body.orderExecutionType,
     });
 
     order.save(function (err) {
@@ -244,6 +258,8 @@ router.put('/:id', passport.authenticate('bearer', { session: false }), function
     })
     // console.log('after ', orderForUpdate)
 
+    console.log('orderForUpdate ', orderForUpdate)
+
     Order.findById(orderId, function (err, order) {
         if (!order) {
             res.statusCode = 404;
@@ -267,6 +283,8 @@ router.put('/:id', passport.authenticate('bearer', { session: false }), function
         order.billOfQuantities = orderForUpdate.billOfQuantities
         order.modified = Date.now()
         order.materials = orderForUpdate.materials
+        order.orderType = orderForUpdate.orderType
+        order.orderExecutionType = orderForUpdate.orderExecutionType
 
 
         order.save(function (err) {

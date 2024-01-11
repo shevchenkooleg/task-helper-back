@@ -34,6 +34,10 @@ const Order = new Schema({
         status: { type: String, required: false, default: 'on_clearance'}
     },
     yearOfExecution: { type: String, required: true },
+
+    orderType: { type: String, required: true },
+    orderExecutionType: { type: String, required: true },
+
     materials: {
         type: [
                 {
