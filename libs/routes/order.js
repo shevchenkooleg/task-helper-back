@@ -1,6 +1,7 @@
 const express = require('express');
 const passport = require('passport');
 const router = express.Router();
+const mongoose = require('mongoose');
 
 const libs = process.cwd() + '/libs/';
 const log = require(libs + 'log')(module);
@@ -148,6 +149,186 @@ router.post('/', passport.authenticate('bearer', { session: false }), function (
     });
 });
 
+// CreateMaterialCorrectionInOrder
+router.post('/:id/createCorrection', passport.authenticate('bearer', { session: false }), function (req, res) {
+
+    const orderId = req.params.id;
+
+    Order.findById(orderId, function (err, order) {
+        if (!order) {
+            res.statusCode = 404;
+            log.error('Article with id: %s Not Found', orderId);
+            return res.json({
+                error: 'Not found'
+            });
+        }
+        order.materialCorrections.push({
+            _orderId: orderId,
+            _id: new mongoose.mongo.ObjectId(),
+        })
+        order.modified = Date.now()
+
+
+        order.save(function (err) {
+            if (!err) {
+                log.info('Material correction created successfully for order ', order.id);
+                return res.json({
+                    status: 'OK',
+                    order: order
+                });
+            } else {
+                if (err.name === 'ValidationError') {
+                    res.statusCode = 400;
+                    return res.json({
+                        error: 'Validation error'
+                    });
+                } else {
+                    res.statusCode = 500;
+
+                    return res.json({
+                        error: 'Server error'
+                    });
+                }
+                log.error('Internal error (%d): %s', res.statusCode, err.message);
+            }
+        });
+    });
+});
+// DeleteMaterialCorrectionInOrder
+router.delete('/:id/deleteCorrection/:correctionId', passport.authenticate('bearer', { session: false }), function (req, res) {
+
+    const orderId = req.params.id;
+    const correctionId = req.params.correctionId
+
+    Order.findById(orderId, function (err, order) {
+        if (!order) {
+            res.statusCode = 404;
+            log.error('Article with id: %s Not Found', orderId);
+            return res.json({
+                error: 'Not found'
+            });
+        }
+        order.materialCorrections = order.materialCorrections.filter(correction=>correction._id !== correctionId)
+        order.modified = Date.now()
+
+
+        order.save(function (err) {
+            if (!err) {
+                log.info(`Material correction with id ${correctionId} deleted successfully from order ${order.id}`);
+                return res.json({
+                    status: 'OK',
+                    order: order
+                });
+            } else {
+                if (err.name === 'ValidationError') {
+                    res.statusCode = 400;
+                    return res.json({
+                        error: 'Validation error'
+                    });
+                } else {
+                    res.statusCode = 500;
+
+                    return res.json({
+                        error: 'Server error'
+                    });
+                }
+                log.error('Internal error (%d): %s', res.statusCode, err.message);
+            }
+        });
+    });
+});
+
+
+// CreateConsignmentNote
+router.post('/:id/createConsignment', passport.authenticate('bearer', { session: false }), function (req, res) {
+
+    const orderId = req.params.id;
+
+    Order.findById(orderId, function (err, order) {
+        if (!order) {
+            res.statusCode = 404;
+            log.error('Article with id: %s Not Found', orderId);
+            return res.json({
+                error: 'Not found'
+            });
+        }
+        order.consignmentNotes.push({
+            _orderId: orderId,
+            _id: new mongoose.mongo.ObjectId(),
+        })
+        order.modified = Date.now()
+
+
+        order.save(function (err) {
+            if (!err) {
+                log.info('Consignment Note created successfully for order ', order.id);
+                return res.json({
+                    status: 'OK',
+                    order: order
+                });
+            } else {
+                if (err.name === 'ValidationError') {
+                    res.statusCode = 400;
+                    return res.json({
+                        error: 'Validation error'
+                    });
+                } else {
+                    res.statusCode = 500;
+
+                    return res.json({
+                        error: 'Server error'
+                    });
+                }
+                log.error('Internal error (%d): %s', res.statusCode, err.message);
+            }
+        });
+    });
+});
+// DeleteConsignmentNoteInOrder
+router.delete('/:id/deleteConsignment/:consignmentNoteId', passport.authenticate('bearer', { session: false }), function (req, res) {
+
+    const orderId = req.params.id;
+    const consignmentNoteId = req.params.consignmentNoteId
+
+    Order.findById(orderId, function (err, order) {
+        if (!order) {
+            res.statusCode = 404;
+            log.error('Article with id: %s Not Found', orderId);
+            return res.json({
+                error: 'Not found'
+            });
+        }
+        order.consignmentNotes = order.consignmentNotes.filter(note=>note._id !== consignmentNoteId)
+        order.modified = Date.now()
+
+
+        order.save(function (err) {
+            if (!err) {
+                log.info(`Consignment note with id ${consignmentNoteId} deleted successfully from order ${order.id}`);
+                return res.json({
+                    status: 'OK',
+                    order: order
+                });
+            } else {
+                if (err.name === 'ValidationError') {
+                    res.statusCode = 400;
+                    return res.json({
+                        error: 'Validation error'
+                    });
+                } else {
+                    res.statusCode = 500;
+
+                    return res.json({
+                        error: 'Server error'
+                    });
+                }
+                log.error('Internal error (%d): %s', res.statusCode, err.message);
+            }
+        });
+    });
+});
+
+
 // Get order
 router.get('/:id', passport.authenticate('bearer', { session: false }), function (req, res) {
 
@@ -252,7 +433,6 @@ router.put('/:id', passport.authenticate('bearer', { session: false }), function
 
 
     const orderForUpdate = req.body
-    // console.log('before ', orderForUpdate)
     orderForUpdate.materials.forEach(material=>{
         keyArray.forEach((el)=>delete material[el])
     })
@@ -340,6 +520,7 @@ router.delete('/:id', passport.authenticate('bearer', { session: false }), funct
         }
     });
 });
+
 
 
 
