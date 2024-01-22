@@ -238,7 +238,6 @@ router.delete('/:id/deleteCorrection/:correctionId', passport.authenticate('bear
     });
 });
 
-
 // CreateConsignmentNote
 router.post('/:id/createConsignment', passport.authenticate('bearer', { session: false }), function (req, res) {
 
@@ -305,6 +304,93 @@ router.delete('/:id/deleteConsignment/:consignmentNoteId', passport.authenticate
         order.save(function (err) {
             if (!err) {
                 log.info(`Consignment note with id ${consignmentNoteId} deleted successfully from order ${order.id}`);
+                return res.json({
+                    status: 'OK',
+                    order: order
+                });
+            } else {
+                if (err.name === 'ValidationError') {
+                    res.statusCode = 400;
+                    return res.json({
+                        error: 'Validation error'
+                    });
+                } else {
+                    res.statusCode = 500;
+
+                    return res.json({
+                        error: 'Server error'
+                    });
+                }
+                log.error('Internal error (%d): %s', res.statusCode, err.message);
+            }
+        });
+    });
+});
+
+// CreateExecution
+router.post('/:id/createExecution', passport.authenticate('bearer', { session: false }), function (req, res) {
+
+    const orderId = req.params.id;
+
+    Order.findById(orderId, function (err, order) {
+        if (!order) {
+            res.statusCode = 404;
+            log.error('Article with id: %s Not Found', orderId);
+            return res.json({
+                error: 'Not found'
+            });
+        }
+        order.executions.push({
+            _orderId: orderId,
+            _id: new mongoose.mongo.ObjectId(),
+        })
+        order.modified = Date.now()
+
+
+        order.save(function (err) {
+            if (!err) {
+                log.info('Execution created successfully for order ', order.id);
+                return res.json({
+                    status: 'OK',
+                    order: order
+                });
+            } else {
+                if (err.name === 'ValidationError') {
+                    res.statusCode = 400;
+                    return res.json({
+                        error: 'Validation error'
+                    });
+                } else {
+                    res.statusCode = 500;
+
+                    return res.json({
+                        error: 'Server error'
+                    });
+                }
+                log.error('Internal error (%d): %s', res.statusCode, err.message);
+            }
+        });
+    });
+});
+// DeleteExecution
+router.delete('/:id/deleteExecution/:executionId', passport.authenticate('bearer', { session: false }), function (req, res) {
+
+    const orderId = req.params.id;
+    const executionId = req.params.executionId
+
+    Order.findById(orderId, function (err, order) {
+        if (!order) {
+            res.statusCode = 404;
+            log.error('Article with id: %s Not Found', orderId);
+            return res.json({
+                error: 'Not found'
+            });
+        }
+        order.executions = order.executions.filter(execution=>execution._id !== executionId)
+        order.modified = Date.now()
+        order.save(function (err) {
+            if (!err) {
+                log.info(`Execution with id ${executionId} deleted successfully from order ${order.id}`);
                 return res.json({
                     status: 'OK',
                     order: order
