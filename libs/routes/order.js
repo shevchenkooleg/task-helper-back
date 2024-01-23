@@ -529,28 +529,39 @@ router.put('/:id', passport.authenticate('bearer', { session: false }), function
     Order.findById(orderId, function (err, order) {
         if (!order) {
             res.statusCode = 404;
-            log.error('Article with id: %s Not Found', orderId);
+            log.error('Order with id: %s Not Found', orderId);
             return res.json({
                 error: 'Not found'
             });
         }
 
-        order.title = orderForUpdate.title;
-        order.description = orderForUpdate.description;
-        order.orderId = orderForUpdate.orderId
-        order.executeId = orderForUpdate.executeId
-        order.description = orderForUpdate.description
-        order.orderStatus = orderForUpdate.orderStatus
-        order.correctionId = orderForUpdate.correctionId
-        order.consignmentNoteId = orderForUpdate.consignmentNoteId
-        order.KS2Id = orderForUpdate.KS2Id
-        order.writeOffActId = orderForUpdate.writeOffActId
-        order.yearOfExecution = orderForUpdate.yearOfExecution
-        order.billOfQuantities = orderForUpdate.billOfQuantities
         order.modified = Date.now()
-        order.materials = orderForUpdate.materials
+        order.orderId = orderForUpdate.orderId
+        order.description = orderForUpdate.description
         order.orderType = orderForUpdate.orderType
         order.orderExecutionType = orderForUpdate.orderExecutionType
+        order.yearOfExecution = orderForUpdate.yearOfExecution
+        order.orderStatus = orderForUpdate.orderStatus
+        order.materialCorrections = orderForUpdate.materialCorrections
+        order.consignmentNotes = orderForUpdate.consignmentNotes
+        order.executions = orderForUpdate.executions
+        order.KS2Documents = orderForUpdate.KS2Documents
+        order.writeOffDocuments = orderForUpdate.writeOffDocuments
+        order.materials = orderForUpdate.materials
+
+
+        // order.title = orderForUpdate.title;
+        // order.executeId = orderForUpdate.executeId
+
+        // order.correctionId = orderForUpdate.correctionId
+        // order.consignmentNoteId = orderForUpdate.consignmentNoteId
+        // order.KS2Id = orderForUpdate.KS2Id
+        // order.writeOffActId = orderForUpdate.writeOffActId
+        // order.billOfQuantities = orderForUpdate.billOfQuantities
+
+
+
+
 
 
         order.save(function (err) {
