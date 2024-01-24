@@ -8,6 +8,7 @@ const log = require(libs + 'log')(module);
 const db = require(libs + 'db/mongoose');
 const Material = require(libs + 'model/material');
 const url = require('url');
+const mongoose = require("mongoose");
 
 
 // List all orders
@@ -17,9 +18,9 @@ router.get('/', passport.authenticate('bearer', { session: false }), function (r
     if (req.query.materialId && req.query.materialId.length !== 0){
         console.log(req.query.materialId)
 
-        Material.find({_id: req.query.materialId}, function (err, order) {
+        Material.find({_id: req.query.materialId}, function (err, material) {
             if (!err) {
-                return res.json(order);
+                return res.json({material, _newMaterialInstanceId: new mongoose.mongo.ObjectId()});
             } else {
                 res.statusCode = 500;
 
@@ -203,6 +204,8 @@ router.put('/:id', passport.authenticate('bearer', { session: false }), function
         material.UPPId = req.body.UPPId;
         material.dimension = req.body.dimension;
         material.fullVolume = req.body.fullVolume;
+        material._id = req.body._id
+        console.log('req.body', req.body)
 
         material.save(function (err) {
             if (!err) {

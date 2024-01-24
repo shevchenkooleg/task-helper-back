@@ -514,7 +514,8 @@ router.get('/:id', passport.authenticate('bearer', { session: false }), function
 router.put('/:id', passport.authenticate('bearer', { session: false }), function (req, res) {
     const orderId = req.params.id;
     const keyArray = [
-        '_id', 'materialName', 'KSUId', 'dimension', 'fullVolume', '__v'
+        // '_id', 'materialName', 'KSUId', 'dimension', 'fullVolume', '__v'
+        'materialName', 'KSUId', 'dimension', 'fullVolume', '__v'
     ]
 
 
