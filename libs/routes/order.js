@@ -404,6 +404,13 @@ router.post('/:id/createInnerDocument/:operationType', passport.authenticate('be
                 })
                 break
             }
+            case 'createWriteOffDocument': {
+                order.writeOffDocuments.push({
+                    _executionId: executionId,
+                    _id: new mongoose.mongo.ObjectId(),
+                })
+                break
+            }
             default: {
                 break
             }
@@ -416,7 +423,8 @@ router.post('/:id/createInnerDocument/:operationType', passport.authenticate('be
                 operationType === 'createCorrection' && log.info('Material correction created successfully for order ', order.id);
                 operationType === 'createConsignment' && log.info('Consignment Note created successfully for order ', order.id);
                 operationType === 'createExecution' && log.info('Execution created successfully for order ', order.id);
-                operationType === 'createKS2' && log.info(`KS2 document for execution ${executionId} created successfully for order `, order.id);
+                operationType === 'createKS2' && log.info(`KS2 document for execution ${executionId} created successfully in order `, order.id);
+                operationType === 'createWriteOffDocument' && log.info(`WriteOff document for execution ${executionId} created successfully in order `, order.id);
                 return res.json({
                     status: 'OK',
                     order: order
@@ -467,9 +475,22 @@ router.delete('/:id/deleteInnerDocument/:operationType/:documentId', passport.au
                 order.modified = Date.now()
                 break
             }
+            case 'deleteKS2': {
+                order.KS2Documents = order.KS2Documents.filter(KS2=>KS2._id !== documentId)
+                order.modified = Date.now()
+                break
+            }
+            case 'deleteWriteOffDocument': {
+                order.writeOffDocuments = order.writeOffDocuments.filter(writeOffDocument=>writeOffDocument._id !== documentId)
+                order.modified = Date.now()
+                break
+            }
             case 'deleteExecution': {
                 order.executions = order.executions.filter(execution=>execution._id !== documentId)
                 order.modified = Date.now()
+                break
+            }
+            default: {
                 break
             }
         }
