@@ -8,9 +8,36 @@ const log = require(libs + 'log')(module);
 
 const db = require(libs + 'db/mongoose');
 const Order = require(libs + 'model/order');
-const Material = require(libs + 'model/material')
 const {params} = require("superagent/lib/utils");
 const url = require("url");
+
+//Search by array with materialID data
+router.get('/searchWithMaterial', passport.authenticate('bearer', { session: false }), function (req, res) {
+
+    const materialId = Object.values(req.query)[0]
+    const yearOfExecution = Object.values(req.query)[1]
+    const userId = Object.values(req.query)[2]
+    console.log('materialId ', materialId)
+    console.log('yearOfExecution ', yearOfExecution)
+    console.log('userId ', userId)
+
+    if (materialId && yearOfExecution){
+        // Order.find( {'materials.items': {$elemMatch: {materialId: query}}}, function (err, orders) {
+        Order.find( {"materials": {$elemMatch: {"materialId": materialId}}, "yearOfExecution": yearOfExecution, "userId": userId}, function (err, order) {
+            if (!err) {
+                return res.json(order);
+            } else {
+                res.statusCode = 500;
+
+                log.error('Internal error(%d): %s', res.statusCode, err.message);
+
+                return res.json({
+                    error: 'Server error'
+                });
+            }
+        });
+    }
+})
 
 //Orders CRUD operations
 
@@ -350,6 +377,8 @@ router.delete('/:id', passport.authenticate('bearer', { session: false }), funct
         }
     });
 });
+
+
 
 
 
