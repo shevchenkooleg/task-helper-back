@@ -36,6 +36,7 @@ router.get('/searchWithMaterial', passport.authenticate('bearer', { session: fal
                 });
             }
         });
+
     }
 })
 

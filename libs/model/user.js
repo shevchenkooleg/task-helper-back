@@ -24,6 +24,10 @@ const mongoose = require('mongoose'),
         roles: {
             type: [String],
             default: ['USER']
+        },
+        userCredentials: {
+            firstName: {type: String},
+            lastName: {type: String},
         }
     });
 

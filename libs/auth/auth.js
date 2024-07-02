@@ -21,10 +21,9 @@ passport.use(new BasicStrategy(
         console.log('BasicStrategy')
         console.log('username ', username)
         console.log('password ', password)
-        console.log('done ', done)
         Client.findOne({ clientId: username }, function (err, client) {
             if (err) {
-                console.log('err')
+                console.log('err ', err)
                 return done(err);
             }
 

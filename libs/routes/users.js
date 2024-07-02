@@ -37,9 +37,10 @@ router.get('/info', passport.authenticate('bearer', { session: false }),
         // example simply returns the scope in the response.
         res.json({
             user_id: req.user.userId,
-            name: req.user.username,
+            userName: req.user.username,
             scope: req.authInfo.scope,
-            roles: req.user.roles
+            roles: req.user.roles,
+            userCredentials: req.user.userCredentials
         });
     }
 );
