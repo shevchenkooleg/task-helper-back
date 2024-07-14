@@ -13,9 +13,13 @@ const Unit = new Schema({
     serialNumber: { type: String, required: false},
     dateOfProduce: { type: String, required: false},
     nextScheduledMaintenanceDate: {
-        maintenanceDate: { type: String, required: false},
-        maintenanceType: { type: String, required: true},
-        _orderId: { type: String, required: false },
+        type: {
+            maintenanceDate: { type: String, required: true},
+            maintenanceType: { type: String, required: true},
+            _orderId: { type: String, required: false },
+        },
+        required: false, default: {}
+
     },
     maintenanceLog: {     // Журнал выполненных ТО
         type: [
