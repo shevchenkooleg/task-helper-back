@@ -18,7 +18,7 @@ const Unit = new Schema({
             maintenanceType: { type: String, required: false},
             _orderId: { type: String, required: false },
         },
-        required: false, default: {}
+        required: false
 
     },
     maintenanceLog: {     // Журнал выполненных ТО
@@ -32,7 +32,7 @@ const Unit = new Schema({
                 _id: { type: String, required: true },
             }
         ],
-        required: false, default: []
+        required: false
     },
 })
 
