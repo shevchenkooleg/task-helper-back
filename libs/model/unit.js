@@ -14,8 +14,8 @@ const Unit = new Schema({
     dateOfProduce: { type: String, required: false},
     nextScheduledMaintenanceDate: {
         type: {
-            maintenanceDate: { type: String, required: true},
-            maintenanceType: { type: String, required: true},
+            maintenanceDate: { type: String, required: false},
+            maintenanceType: { type: String, required: false},
             _orderId: { type: String, required: false },
         },
         required: false, default: {}
