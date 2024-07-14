@@ -8,6 +8,7 @@ const Unit = new Schema({
     unitType: { type: String, required: true },
     unitModel: { type: String, required: false },
     unitKKS: { type: String, required: false },
+    toroKKS: { type: String, required: false },
     nestingLevel: { type: Number, required: true, default: 0 },
     serialNumber: { type: String, required: false, default: '' },
     dateOfProduce: { type: String, required: false, default: '' },
