@@ -10,10 +10,26 @@ const Unit = new Schema({
     unitKKS: { type: String, required: false },
     toroKKS: { type: String, required: false },
     nestingLevel: { type: Number, required: true, default: 0 },
-    serialNumber: { type: String, required: false, default: '' },
-    dateOfProduce: { type: String, required: false, default: '' },
-    lastMaintenanceDate: { type: String, required: false, default: '' },
-    nextMaintenanceDate: { type: String, required: false, default: '' },
+    serialNumber: { type: String, required: false},
+    dateOfProduce: { type: String, required: false},
+    nextScheduledMaintenanceDate: {
+        maintenanceDate: { type: String, required: false},
+        maintenanceType: { type: String, required: true},
+        _orderId: { type: String, required: false },
+    },
+    maintenanceLog: {     // Журнал выполненных ТО
+        type: [
+            {
+                maintenanceDate: { type: String, required: true},
+                maintenanceType: { type: String, required: true},
+                reasonOfMaintenance: { type: String, required: true, default: ''},
+                maintenanceResult: { type: String, required: false, default: '' },
+                _orderId: { type: String, required: false },
+                _id: { type: String, required: true },
+            }
+        ],
+        required: false, default: []
+    },
 })
 
 module.exports = mongoose.model('Unit', Unit);
