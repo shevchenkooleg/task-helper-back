@@ -18,6 +18,7 @@ const users = require('./routes/users');
 const order = require('./routes/order');
 const material = require('./routes/material');
 const unit = require('./routes/unit');
+const maintenance = require('./routes/maintenance');
 
 
 
@@ -43,6 +44,7 @@ app.use('/api/users', users);
 app.use('/api/order', order)
 app.use('/api/unit', unit)
 app.use('/api/material', material)
+app.use('/api/maintenance', maintenance)
 app.use('/api/oauth/token', oauth2.token);
 
 

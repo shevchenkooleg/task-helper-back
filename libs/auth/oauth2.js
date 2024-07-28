@@ -44,12 +44,15 @@ const generateTokens = function (data, done) {
     data.token = refreshTokenValue;
     refreshToken = new RefreshToken(data);
 
+    console.log('newToken ', token)
+    console.log('newRefreshToken ', refreshToken)
+
     refreshToken.save(errorHandler);
 
     token.save(function (err) {
         if (err) {
-
             log.error(err);
+            console.log('error in token.save block')
             return done(err);
         }
         done(null, tokenValue, refreshTokenValue, {

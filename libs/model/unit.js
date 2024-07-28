@@ -12,6 +12,19 @@ const Unit = new Schema({
     nestingLevel: { type: Number, required: true, default: 0 },
     serialNumber: { type: String, required: false},
     dateOfProduce: { type: String, required: false},
+    scheduledMaintenanceList: {
+        type: [
+                {
+                _id: { type: String, required: true },
+                fullName: { type: String, required: true },
+                shortName: { type: String, required: true },
+                periodicity: { type: String, required: true },
+                replaceableMaintenanceId: {
+                    type: [{ type: String, required: true }]
+                }
+            }
+        ]
+    },
     nextScheduledMaintenanceDate: {
         type: {
             maintenanceDate: { type: String, required: false},

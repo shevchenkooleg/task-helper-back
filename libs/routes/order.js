@@ -139,6 +139,11 @@ router.get('/', passport.authenticate('bearer', { session: false }), function (r
         });
     }
 });
+
+
+
+
+
 // Create order
 router.post('/', passport.authenticate('bearer', { session: false }), function (req, res) {
 
@@ -177,6 +182,10 @@ router.post('/', passport.authenticate('bearer', { session: false }), function (
         }
     });
 });
+
+
+
+
 // Get order
 router.get('/:id', passport.authenticate('bearer', { session: false }), function (req, res) {
 
@@ -271,6 +280,10 @@ router.get('/:id', passport.authenticate('bearer', { session: false }), function
     //     }
     // });
 });
+
+
+
+
 // Update order
 router.put('/:id', passport.authenticate('bearer', { session: false }), function (req, res) {
     const orderId = req.params.id;
@@ -351,6 +364,10 @@ router.put('/:id', passport.authenticate('bearer', { session: false }), function
         });
     });
 });
+
+
+
+
 //Delete order
 router.delete('/:id', passport.authenticate('bearer', { session: false }), function (req, res) {
 

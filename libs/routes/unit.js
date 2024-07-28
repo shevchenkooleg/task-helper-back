@@ -178,27 +178,94 @@ router.get('/search', passport.authenticate('bearer', { session: false }), funct
             }
         });
     }
+});
 
-    // if (req.query.materialId && req.query.materialId.length !== 0){
-    //     console.log(req.query.materialId)
-    //
-    // } else {
-    //     console.log('getMaterials')
-    //     Material.find(function (err, order) {
-    //         if (!err) {
-    //             return res.json(order);
-    //         } else {
-    //             res.statusCode = 500;
-    //
-    //             log.error('Internal error(%d): %s', res.statusCode, err.message);
-    //
-    //             return res.json({
-    //                 error: 'Server error'
-    //             });
-    //         }
-    //     });
-    // }
 
+// Update unit
+router.put('/:id', passport.authenticate('bearer', { session: false }), function (req, res) {
+    const unitId = req.params.id;
+    // const keyArray = [
+    //     // '_id', 'materialName', 'KSUId', 'dimension', 'fullVolume', '__v'
+    //     'materialName', 'KSUId', 'dimension', 'fullVolume', '__v'
+    // ]
+    //
+    //
+    // const orderForUpdate = req.body
+    // orderForUpdate.materials.forEach(material=>{
+    //     keyArray.forEach((el)=>delete material[el])
+    // })
+    // console.log('after ', orderForUpdate)
+
+    // console.log('orderForUpdate ', orderForUpdate)
+
+    Unit.findById(unitId, function (err, unit) {
+        if (!unit) {
+            res.statusCode = 404;
+            log.error('Unit with id: %s Not Found', unitId);
+            return res.json({
+                error: 'Not found'
+            });
+        }
+
+        // console.log(req.body)
+        // console.log('req.body.rep ', req.body.scheduledMaintenanceList[0].replaceableMaintenance)
+
+
+        if (req.body.unitName) unit.unitName = req.body.unitName
+        unit.modified = Date.now()
+        if (req.body.parentId) unit.parentId = req.body.parentId
+        if (req.body.unitType) unit.unitType = req.body.unitType
+        if (req.body.unitModel) unit.unitModel = req.body.unitModel
+        if (req.body.unitKKS) unit.unitKKS = req.body.unitKKS
+        if (req.body.toroKKS) unit.toroKKS = req.body.toroKKS
+        if (req.body.nestingLevel) unit.nestingLevel = req.body.nestingLevel
+        if (req.body.serialNumber) unit.serialNumber = req.body.serialNumber
+        if (req.body.dateOfProduce) unit.dateOfProduce = req.body.dateOfProduce
+        if (req.body.scheduledMaintenanceList) unit.scheduledMaintenanceList = [...unit.scheduledMaintenanceList, {...req.body.scheduledMaintenanceList[0], replaceableMaintenanceId: [...req.body.scheduledMaintenanceList[0].replaceableMaintenanceId]}]
+        if (req.body.nextScheduledMaintenanceDate) unit.nextScheduledMaintenanceDate = req.body.nextScheduledMaintenanceDate
+        if (req.body.maintenanceLog) unit.maintenanceLog = req.body.maintenanceLog
+        if (req.body.materials) unit.materials = req.body.materials
+
+
+        // order.title = orderForUpdate.title;
+        // order.executeId = orderForUpdate.executeId
+
+        // order.correctionId = orderForUpdate.correctionId
+        // order.consignmentNoteId = orderForUpdate.consignmentNoteId
+        // order.KS2Id = orderForUpdate.KS2Id
+        // order.writeOffActId = orderForUpdate.writeOffActId
+        // order.billOfQuantities = orderForUpdate.billOfQuantities
+
+
+
+
+
+
+        unit.save(function (err) {
+            if (!err) {
+                log.info('Unit with id: %s updated', unit.id);
+                console.log('saved unit ', unit)
+                return res.json({
+                    status: 'OK',
+                    unit: unit
+                });
+            } else {
+                if (err.name === 'ValidationError') {
+                    res.statusCode = 400;
+                    return res.json({
+                        error: 'Validation error'
+                    });
+                } else {
+                    res.statusCode = 500;
+
+                    return res.json({
+                        error: 'Server error'
+                    });
+                }
+                log.error('Internal error (%d): %s', res.statusCode, err.message);
+            }
+        });
+    });
 });
 
 

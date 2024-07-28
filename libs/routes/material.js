@@ -71,27 +71,6 @@ router.get('/search', passport.authenticate('bearer', { session: false }), funct
                     }
                 });
     }
-
-    // if (req.query.materialId && req.query.materialId.length !== 0){
-    //     console.log(req.query.materialId)
-    //
-    // } else {
-    //     console.log('getMaterials')
-    //     Material.find(function (err, order) {
-    //         if (!err) {
-    //             return res.json(order);
-    //         } else {
-    //             res.statusCode = 500;
-    //
-    //             log.error('Internal error(%d): %s', res.statusCode, err.message);
-    //
-    //             return res.json({
-    //                 error: 'Server error'
-    //             });
-    //         }
-    //     });
-    // }
-
 });
 
 //Search by array with materialID data
